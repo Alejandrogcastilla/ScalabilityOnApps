@@ -1,0 +1,29 @@
+{% extends "html/base_index.html" %}
+{% load static%}
+{% block content %}
+
+<div class="container">
+    <h1>Publicaciones</h1>
+    <div class="row">
+
+        {% for publicacion in publicaciones %}
+            <div class="col-md-3">
+                <a href= {% url 'publicacion' pk=publicacion.id %}>
+                <div class="card" style="width:100%; margin:5px 5px;">
+
+                    <img src={{publicacion.imagen.url}} class="card-img-top">
+
+                    <div class="card-body" style="text-align: center;">
+
+                        <h7 class="card-title">{{publicacion.titulo}}</h7>
+                        <p class="card-text">Por: {{publicacion.autor}}</p>
+                    </div>
+                </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "html/base_index.html" %}
+{% load static%}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<br><br><br>
+<div class="container">
+    <div class="row">
+
+        {% for publicacion in publicaciones %}
+            <div class="col-md-8">
+                <div class="card" style="width:100%; margin:5px 5px;">
+
+                    <img src={{publicacion.imagen.url}} class="card-img-top">
+
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <b><h1>{{publicacion.titulo}}</h1></b>
+                <br>
+                <h6>Publicado por <b>{{publicacion.autor}}</b> el dia {{publicacion.fecha}}</h6>
+                <hr>
+                <p>{{publicacion.descripcion}}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+
+    <br><br>
+
+    {% if current_user == current_post_user %}
+    <div class="d-flex flex-row-reverse">
+        <a href={% url 'delete_publicacion' post=curret_publicacion %}>
+            <button class="btn btn-outline-danger">Borrar publicación</button>
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+
+
+<br><br><br>
+
+<div class="container mt-5">
+
+
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form | crispy }}
+                <button class="btn btn-secondary">Comentar</button>
+            </form>
+
+            <br>
+
+            <div class="headings d-flex justify-content-between align-items-center mb-3">
+                        <h5>Comentarios({{comentarios.count}})</h5>
+            </div>
+            {% for comentario in comentarios %}
+            <div class="row  d-flex justify-content-center">
+                <div class="col-md-12">
+
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                              <div class="user d-flex flex-row align-items-center">
+                                    <img src="https://i.imgur.com/hczKIze.jpg" width="30" class="user-img rounded-circle mr-2">
+                                    <span>
+                                        <small class="font-weight-bold text-primary">{{comentario.autor}}</small>
+                                        <small class="font-weight-bold">{{comentario.descripcion}}</small>
+                                    </span>
+                              </div>
+                             <small>{{comentario.fecha}}</small>
+                        </div>
+
+
+                        <div class="action d-flex justify-content-between mt-2 align-items-center">
+
+                            {% if current_user == current_post_user %}
+                            <div class="reply px-4">
+                                <a href={% url 'delete_comentario' pk=comentario.id post=curret_publicacion %}>
+                                    <small>Eliminar</small>
+                                </a>
+                                <small>Editar</small>
+                            </div>
+                            {% endif %}
+
+                            <div class="icons align-items-center">
+                                <i class="fa fa-star text-warning"></i>
+                                <i class="fa fa-check-circle-o check-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
